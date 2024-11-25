@@ -7,7 +7,7 @@ export default function Home() {
       <main className={styles.main}>
         <section id='header'></section>
         <Header />
-        <table>
+        <table className={styles.table}>
           <thead>
             <tr>
               <th>Name</th>

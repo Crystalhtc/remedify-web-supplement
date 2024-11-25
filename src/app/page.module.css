@@ -1,6 +1,27 @@
+.main {
+    margin: 1rem;
+}
 
+.table {
+  width: 100vw;
+  border-collapse: collapse;
+  margin: 1rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--dark-green);
+}
+
+.table th {
+  background-color: var(--dark-green);
+  color: var(--silver-white);
+}
 
 .page {
+
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
   --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
