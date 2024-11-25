@@ -44,54 +44,24 @@ export default function Header() {
 
     return (
         <nav className={styles.nav}>
-            <div className={styles.navbarContainer}>
-                <div className={styles.logoContainer}>
-                    <a href="#header" onClick={() => handleLinkClick('#header')} className={activeSection === '#features' ? styles.activeLink : ''}>
-                        <img src="/logo.svg" alt="Remedify logo" className={styles.logo} />
-                    </a>
-                </div>
-                <div className={styles.hamburger} onClick={toggleMenu}>
-                    <span className={styles.hamburgerBar}></span>
-                    <span className={styles.hamburgerBar}></span>
-                    <span className={styles.hamburgerBar}></span>
-                </div>
+            <div className={styles.logoContainer}>
+                <a href="/" onClick={() => handleLinkClick('')} className={activeSection === '#features' ? styles.activeLink : ''}>
+                    <img src="/logo.svg" alt="Remedify logo" className={styles.logo} />
+                </a>
+            </div>
+
+            <div>
+                <h1>Medication Database</h1>
             </div>
             
             <ul className={`${styles.navList} ${isMenuOpen ? styles.navListOpen : ''}`}>
                 <li className={`${styles.navItem} ${styles.firstNavItem}`}>
                     <a 
-                        href="#features" 
-                        onClick={() => handleLinkClick('#features')} 
+                        href="../about" 
+                        onClick={() => handleLinkClick('')} 
                         className={`${styles.navLink} ${activeSection === '#features' ? styles.activeLink : ''}`}
                     >
-                        Features
-                    </a>
-                </li>
-                <li className={styles.navItem}>
-                    <a 
-                        href="#audience" 
-                        onClick={() => handleLinkClick('#audience')} 
-                        className={`${styles.navLink} ${activeSection === '#audience' ? styles.activeLink : ''}`}
-                    >
-                        Who Remedify is For
-                    </a>
-                </li>
-                <li className={`${styles.navItem} ${styles.lastNavItem}`}>
-                    <a 
-                        href="#team" 
-                        onClick={() => handleLinkClick('#team')} 
-                        className={`${styles.navLink} ${activeSection === '#team' ? styles.activeLink : ''}`}
-                    >
-                        Meet Remedify Team
-                    </a>
-                </li>
-                <li className={`${styles.navItem} ${styles.lastNavItem}`}>
-                    <a 
-                        href="#blog" 
-                        onClick={() => handleLinkClick('#blog')} 
-                        className={`${styles.navLink} ${activeSection === '#blog' ? styles.activeLink : ''}`}
-                    >
-                        Blog
+                        About Us
                     </a>
                 </li>
             </ul>
