@@ -29,7 +29,7 @@ export default function About() {
                     This will involve features such as recognizing instructions and medications
                     from photos via OCR/Vision, and providing users with information.
                     </p>
-                    <button>Know More About Us</button>
+                    <button href="https://www.remedify.ca/">Know More About Us</button>
                 </div>
             </div>
         </div>`

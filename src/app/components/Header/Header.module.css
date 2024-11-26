@@ -16,6 +16,15 @@
     z-index: 1000;
 }
 
+.pageTitleContainer {
+    width: 33.3%;
+    text-align: center;
+}
+
+.pageTitle {
+    font-size: 1.5rem;
+}
+
 @media (prefers-color-scheme: dark) {
     .nav {
         background-color: var(--dark-gray);
@@ -25,53 +34,13 @@
     height: 70px;
 }
 
-.hamburger {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-direction: column;
-    gap: 0.4rem;
-    z-index: 1100;
-    padding: 10px;
-    transition: all 0.3s ease-in-out;
-}
-
-.hamburgerBar {
-    width: 25px;
-    height: 3px;
-    background-color: black;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.hamburger.open .hamburgerBar:first-child {
-    transform: translateY(11px) rotate(45deg);
-}
-
-.hamburger.open .hamburgerBar:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.open .hamburgerBar:last-child {
-    transform: translateY(-11px) rotate(-45deg);
-}
-
-.navList {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    width: 100%;
-}
-
-.navItem {
-    text-align: center;
-    position: relative;
-    display: block;
+.logoContainer {
+    width: 33.3%;
 }
 
 .navLink {
+    width: 33.3%;
+    text-align: right;
     display: block;
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -105,21 +74,6 @@
         width: 100%;
     }
     
-    .navList {
-        display: none;
-        position: fixed;
-        top: 72px;
-        left: 0;
-        width: 100%;
-        background-color: var(--silver-white);
-        z-index: 999;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 0;
-        box-shadow: 4px 4px 20px 0 var(--gray-alpha-200);
-    }
-    
     @media (prefers-color-scheme: dark) {
         .navList {
             background-color: var(--dark-gray);
@@ -129,47 +83,9 @@
         height: 30px;
     }
 
-    .hamburger {
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-    }
-
-    .hamburgerBar {
-        background-color: var(--green);
-    }
-
-    .navListOpen {
-        display: flex;
-        opacity: 0;
-        animation: fadeIn 0.3s ease-in-out forwards;
-    }
-
-    .navItem {
-        border-bottom: 1px solid var(--gray-alpha-200);
-        width: 100%;
-        box-shadow: inset 4px 4px 20px 0 #00000009;
-    }
-
     .navLink {
         padding: 1rem 0;
         width: 100%;
-    }
-
-    .firstNavItem {
-        border-top: 1px solid var(--gray-alpha-200);
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 
     .activeLink {

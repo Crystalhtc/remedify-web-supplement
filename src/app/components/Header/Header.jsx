@@ -50,21 +50,16 @@ export default function Header() {
                 </a>
             </div>
 
-            <div>
-                <h1>Medication Database</h1>
+            <div className={styles.pageTitleContainer}>
+                <h1 className={styles.pageTitle}>Medication Database</h1>
             </div>
-            
-            <ul className={`${styles.navList} ${isMenuOpen ? styles.navListOpen : ''}`}>
-                <li className={`${styles.navItem} ${styles.firstNavItem}`}>
-                    <a 
-                        href="../about" 
-                        onClick={() => handleLinkClick('')} 
-                        className={`${styles.navLink} ${activeSection === '#features' ? styles.activeLink : ''}`}
-                    >
-                        About Us
-                    </a>
-                </li>
-            </ul>
+                <a 
+                    href="../about" 
+                    onClick={() => handleLinkClick('')} 
+                    className={`${styles.navLink} ${activeSection === '#features' ? styles.activeLink : ''}`}
+                >
+                    About Us
+                </a>
         </nav>
     );
 }
