@@ -29,7 +29,11 @@ export default function About() {
                     This will involve features such as recognizing instructions and medications
                     from photos via OCR/Vision, and providing users with information.
                     </p>
-                    <button href="https://www.remedify.ca/">Know More About Us</button>
+                    <button>
+                        <a href="https://www.remedify.ca/" className={styles.button}>
+                            Know More About Us
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>`
