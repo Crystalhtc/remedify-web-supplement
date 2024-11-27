@@ -60,7 +60,7 @@ export default function Home() {
       setError(error);
       setIsLoading(false);
     }
-  }, [currentPage, searchTerm]);
+  }, []);
 
   useEffect(() => {
     fetchDrugData();
