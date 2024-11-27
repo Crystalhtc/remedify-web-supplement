@@ -4,6 +4,9 @@
     margin: 0 auto;
     height: 100vh;
 }
+.main p, .main li {
+    font-size: 12px;
+}
 .links {
     display: flex;
     margin: 2rem 0;
@@ -41,7 +44,7 @@
 }
 @media (prefers-color-scheme: dark) {
     .outerBentoContainer section {
-      color: var(--text)!important;
+        color: var(--text)!important;
     }
 }
 .ingredients {
