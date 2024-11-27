@@ -1,5 +1,4 @@
 "use client"
-"use client"
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from "./page.module.css";
 import Header from "./components/Header/Header";
@@ -19,52 +18,39 @@ export default function Home() {
   const fetchDrugData = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Fetch FDA Drug Label API
-      const response = await fetch('https://api.fda.gov/drug/label.json?limit=1000');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      // Fetch both APIs concurrently
+      const [drugResponse, formResponse] = await Promise.all([
+        fetch('https://health-products.canada.ca/api/drug/drugproduct/?lang=en&type=json'),
+        fetch('https://health-products.canada.ca/api/drug/form/?lang=en&type=json')
+      ]);
 
-      // Transform API data to extract required fields from openfda
-      const transformedDrugData = data.results.map(drug => {
-        // Safely access openfda data with fallbacks
-        const openfda = drug.openfda || {};
-        
-        return {
-          generic_name: openfda.generic_name?.[0] || 'N/A',
-          route: openfda.route?.[0] || 'N/A',
-          brand_name: openfda.brand_name?.[0] || 'N/A',
-          manufacturer_name: openfda.manufacturer_name?.[0] || 'N/A',
-          id: drug.id || Math.random().toString()
-        };
-      }).filter(drug => 
-        // Filter out entries with 'N/A' in all fields
-        drug.generic_name !== 'N/A' || 
-        drug.route !== 'N/A' || 
-        drug.brand_name !== 'N/A' || 
-        drug.manufacturer_name !== 'N/A'
-      );
+      const drugData = await drugResponse.json();
+      const formData = await formResponse.json();
 
-      setOriginalDrugData(transformedDrugData);
+      // Create a form map for quick lookup by drug_code
+      const formMap = formData.reduce((acc, form) => {
+        acc[form.drug_code] = form.pharmaceutical_form_name;
+        return acc;
+      }, {});
 
-      // Filter drugs based on current search term
-      const filteredDrugs = transformedDrugData.filter(drug => 
+      // Combine drug data with matched form information
+      const combinedDrugData = drugData.map(drug => ({
+        ...drug,
+        pharmaceutical_form_name: formMap[drug.drug_code] || 'N/A'
+      }));
+
+      setOriginalDrugData(combinedDrugData);
+
+      // Initial filtering and pagination
+      const filteredDrugs = combinedDrugData.filter(drug => 
         drug.brand_name.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
       // Calculate total pages
-      const newTotalPages = Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE);
-      setTotalPages(newTotalPages);
-
-      // Adjust current page if it's beyond the new total pages
-      const adjustedPage = Math.min(currentPage, newTotalPages);
-      setCurrentPage(adjustedPage);
+      setTotalPages(Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE));
 
       // Paginate the filtered drugs
-      const startIndex = (adjustedPage - 1) * ITEMS_PER_PAGE;
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
       const paginatedDrugs = filteredDrugs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
       setDrugProducts(paginatedDrugs);
@@ -74,11 +60,11 @@ export default function Home() {
       setError(error);
       setIsLoading(false);
     }
-  }, []);
+  }, [currentPage, searchTerm]);
 
   useEffect(() => {
     fetchDrugData();
-  }, []);
+  }, [fetchDrugData]);
 
   // Handle search input change
   const handleSearchChange = (event) => {
@@ -92,11 +78,11 @@ export default function Home() {
     );
 
     // Calculate total pages
-    const newTotalPages = Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE);
-    setTotalPages(newTotalPages);
+    setTotalPages(Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE));
 
     // Paginate the filtered drugs
-    const paginatedDrugs = filteredDrugs.slice(0, ITEMS_PER_PAGE);
+    const startIndex = 0; // Always start from the first page
+    const paginatedDrugs = filteredDrugs.slice(startIndex, ITEMS_PER_PAGE);
 
     setDrugProducts(paginatedDrugs);
   };
@@ -129,7 +115,7 @@ export default function Home() {
     }
 
     return Array.from(
-      { length: Math.max(0, endPage - startPage + 1) }, 
+      { length: endPage - startPage + 1 }, 
       (_, i) => startPage + i
     );
   };
@@ -160,14 +146,6 @@ export default function Home() {
     </tr>
   );
 
-  // Error Handling Component
-  const ErrorDisplay = () => (
-    <div className={styles.errorContainer}>
-      <p>Error Loading Drug Data</p>
-      <p>{error ? error.message : 'An unknown error occurred'}</p>
-    </div>
-  );
-
   return (
     <div className={styles.page}>
       <div className={styles.nav}>
@@ -175,9 +153,6 @@ export default function Home() {
       </div>
       
       <main className={styles.main}>
-        {/* Error Handling */}
-        {error && <ErrorDisplay />}
-
         <div className={styles.searchContainer}>
           <p className={styles.searchText}>Search by Brand Name:</p>
           <form className={styles.search}>
@@ -191,15 +166,14 @@ export default function Home() {
             />
           </form>
         </div>
-
         <div className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Generic Name</th>
-                <th>Route</th>
                 <th>Brand Name</th>
-                <th>Manufacturer</th>
+                <th>Drug Identification Number</th>
+                <th>Dosage Form</th>
+                <th>Company Name</th>
               </tr>
             </thead>
             <tbody>
@@ -208,11 +182,11 @@ export default function Home() {
                     <LoadingPlaceholder key={index} />
                   ))
                 : drugProducts.map((drug) => (
-                    <tr key={drug.id}>
-                      <td>{drug.generic_name}</td>
-                      <td>{drug.route}</td>
+                    <tr key={drug.drug_identification_number}>
                       <td>{drug.brand_name}</td>
-                      <td>{drug.manufacturer_name}</td>
+                      <td>{drug.drug_identification_number}</td>
+                      <td>{drug.pharmaceutical_form_name}</td>
+                      <td>{drug.company_name}</td>
                     </tr>
                   ))
               }
@@ -221,40 +195,38 @@ export default function Home() {
         </div>
 
         {/* Pagination Controls */}
-        
-          <div className={styles.paginationContainer}>
-            {/* Previous button */}
-            {currentPage > 1 && (
-              <button 
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={styles.paginationButton}
-              >
-                {'<'}
-              </button>
-            )}
+        <div className={styles.paginationContainer}>
+          {/* Previous button */}
+          {currentPage > 1 && (
+            <button 
+              onClick={() => handlePageChange(currentPage - 1)}
+              className={styles.paginationButton}
+            >
+              {'<'}
+            </button>
+          )}
 
-            {/* Pagination Buttons */}
-            {getPaginationButtons().map(page => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`${styles.paginationButton} ${currentPage === page ? styles.activePage : ''}`}
-              >
-                {page}
-              </button>
-            ))}
+          {/* Pagination Buttons */}
+          {getPaginationButtons().map(page => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`${styles.paginationButton} ${currentPage === page ? styles.activePage : ''}`}
+            >
+              {page}
+            </button>
+          ))}
 
-            {/* Next button */}
-            {currentPage < totalPages && (
-              <button 
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={styles.paginationButton}
-              >
-                {'>'}
-              </button>
-            )}
-          </div>
-        
+          {/* Next button */}
+          {currentPage < totalPages && (
+            <button 
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={styles.paginationButton}
+            >
+              {'>'}
+            </button>
+          )}
+        </div>
 
         {/* Show total results */}
         <div className={styles.resultsInfo}>
