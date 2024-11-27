@@ -15,11 +15,39 @@ export default function Home() {
   const ITEMS_PER_PAGE = 10;
   const MAX_PAGINATION_BUTTONS = 5;
 
-  // Filter function to reuse across the component
+  // Enhanced filter function with DIN sorting
   const filterDrugs = (drugs, term) => {
-    return drugs.filter(drug => 
-      drug.brand_name.toLowerCase().startsWith(term.toLowerCase())
+    if (!term.trim()) return drugs.sort((a, b) => 
+      parseInt(a.drug_identification_number) - parseInt(b.drug_identification_number)
     );
+
+    const lowercaseTerm = term.toLowerCase();
+
+    // Filter and sort drugs
+    return drugs
+      .filter(drug => {
+        const lowercaseBrandName = drug.brand_name.toLowerCase();
+        return lowercaseBrandName.includes(lowercaseTerm);
+      })
+      .sort((a, b) => {
+        const lowercaseBrandA = a.brand_name.toLowerCase();
+        const lowercaseBrandB = b.brand_name.toLowerCase();
+        const lowercaseTerm = term.toLowerCase();
+
+        // Exact match first
+        if (lowercaseBrandA === lowercaseTerm) return -1;
+        if (lowercaseBrandB === lowercaseTerm) return 1;
+
+        // Starts with match next, prioritized
+        const startsWithA = lowercaseBrandA.startsWith(lowercaseTerm);
+        const startsWithB = lowercaseBrandB.startsWith(lowercaseTerm);
+
+        if (startsWithA && !startsWithB) return -1;
+        if (!startsWithA && startsWithB) return 1;
+
+        // If brand names are similar, sort by DIN
+        return parseInt(a.drug_identification_number) - parseInt(b.drug_identification_number);
+      });
   };
 
   const fetchDrugData = useCallback(async () => {
@@ -46,9 +74,14 @@ export default function Home() {
         pharmaceutical_form_name: formMap[drug.drug_code] || 'N/A'
       }));
 
-      // Sort the combined drug data to ensure consistent order
-      const sortedDrugData = combinedDrugData.sort((a, b) => 
-        a.brand_name.localeCompare(b.brand_name)
+      // Remove specific unwanted entry
+      const filteredDrugData = combinedDrugData.filter(drug => 
+        !(drug.brand_name + drug.drug_identification_number + drug.pharmaceutical_form_name + drug.company_name).includes("MYSOLINE PRIMIDONE TABLETS 250MG00002631TabletAYERST VETERINARY LABORATORIES")
+      );
+
+      // Sort by DIN initially
+      const sortedDrugData = filteredDrugData.sort((a, b) => 
+        parseInt(a.drug_identification_number) - parseInt(b.drug_identification_number)
       );
 
       setOriginalDrugData(sortedDrugData);
@@ -70,7 +103,7 @@ export default function Home() {
       setError(error);
       setIsLoading(false);
     }
-  }, []);
+  }, [currentPage, searchTerm]);
 
   useEffect(() => {
     fetchDrugData();
