@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 3rem;
-    padding: 2rem 3rem;
+    padding: 1rem 3rem;
     box-shadow: 4px 4px 20px 0 var(--gray-alpha-200);
     background-color: var(--silver-white);
     position: sticky;

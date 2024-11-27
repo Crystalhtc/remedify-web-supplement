@@ -162,7 +162,7 @@ a.secondary {
   justify-content: center;
   align-items: center;
   width: 100vw;
-
+  padding-bottom: 3rem;
 }
 
 .nav {
@@ -174,7 +174,7 @@ a.secondary {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .table {

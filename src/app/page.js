@@ -15,6 +15,13 @@ export default function Home() {
   const ITEMS_PER_PAGE = 10;
   const MAX_PAGINATION_BUTTONS = 5;
 
+  // Filter function to reuse across the component
+  const filterDrugs = (drugs, term) => {
+    return drugs.filter(drug => 
+      drug.brand_name.toLowerCase().startsWith(term.toLowerCase())
+    );
+  };
+
   const fetchDrugData = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -39,12 +46,15 @@ export default function Home() {
         pharmaceutical_form_name: formMap[drug.drug_code] || 'N/A'
       }));
 
-      setOriginalDrugData(combinedDrugData);
+      // Sort the combined drug data to ensure consistent order
+      const sortedDrugData = combinedDrugData.sort((a, b) => 
+        a.brand_name.localeCompare(b.brand_name)
+      );
+
+      setOriginalDrugData(sortedDrugData);
 
       // Initial filtering and pagination
-      const filteredDrugs = combinedDrugData.filter(drug => 
-        drug.brand_name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const filteredDrugs = filterDrugs(sortedDrugData, searchTerm);
 
       // Calculate total pages
       setTotalPages(Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE));
@@ -64,7 +74,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchDrugData();
-  }, [fetchDrugData]);
+  }, []);
 
   // Handle search input change
   const handleSearchChange = (event) => {
@@ -73,9 +83,7 @@ export default function Home() {
     setCurrentPage(1); // Reset to first page when searching
 
     // Filter drugs based on brand name
-    const filteredDrugs = originalDrugData.filter(drug => 
-      drug.brand_name.toLowerCase().includes(term.toLowerCase())
-    );
+    const filteredDrugs = filterDrugs(originalDrugData, term);
 
     // Calculate total pages
     setTotalPages(Math.ceil(filteredDrugs.length / ITEMS_PER_PAGE));
@@ -83,6 +91,19 @@ export default function Home() {
     // Paginate the filtered drugs
     const startIndex = 0; // Always start from the first page
     const paginatedDrugs = filteredDrugs.slice(startIndex, ITEMS_PER_PAGE);
+
+    setDrugProducts(paginatedDrugs);
+  };
+
+  // Handle pagination
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+
+    // Paginate the filtered drugs for the new page
+    const filteredDrugs = filterDrugs(originalDrugData, searchTerm);
+
+    const startIndex = (newPage - 1) * ITEMS_PER_PAGE;
+    const paginatedDrugs = filteredDrugs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     setDrugProducts(paginatedDrugs);
   };
@@ -118,21 +139,6 @@ export default function Home() {
       { length: endPage - startPage + 1 }, 
       (_, i) => startPage + i
     );
-  };
-
-  // Handle pagination
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-
-    // Paginate the filtered drugs for the new page
-    const filteredDrugs = originalDrugData.filter(drug => 
-      drug.brand_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const startIndex = (newPage - 1) * ITEMS_PER_PAGE;
-    const paginatedDrugs = filteredDrugs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-    setDrugProducts(paginatedDrugs);
   };
 
   // Placeholder Loading Component
@@ -230,9 +236,7 @@ export default function Home() {
 
         {/* Show total results */}
         <div className={styles.resultsInfo}>
-          Total Results: {originalDrugData.filter(drug => 
-            drug.brand_name.toLowerCase().includes(searchTerm.toLowerCase())
-          ).length}
+          Total Results: {filterDrugs(originalDrugData, searchTerm).length}
         </div>
       </main>
     </div>
