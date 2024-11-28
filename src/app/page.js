@@ -1,9 +1,11 @@
 "use client"
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import styles from "./page.module.css";
 import Header from "./components/Header/Header";
 
 export default function Home() {
+  const router = useRouter(); // Initialize router
   const [originalDrugData, setOriginalDrugData] = useState([]);
   const [drugProducts, setDrugProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,6 +16,11 @@ export default function Home() {
 
   const ITEMS_PER_PAGE = 10;
   const MAX_PAGINATION_BUTTONS = 5;
+
+  // Handle row click to navigate to medication details
+  const handleRowClick = (din) => {
+    router.push(`/dashboard?din=${din}`);
+  };
 
   // Enhanced filter function with DIN sorting
   const filterDrugs = (drugs, term) => {
@@ -221,7 +228,11 @@ export default function Home() {
                     <LoadingPlaceholder key={index} />
                   ))
                 : drugProducts.map((drug) => (
-                    <tr key={drug.drug_identification_number}>
+                    <tr 
+                      key={drug.drug_identification_number} 
+                      onClick={() => handleRowClick(drug.drug_identification_number)}
+                      className={styles.clickableRow} // Add this class for hover/cursor effects
+                    >
                       <td>{drug.brand_name}</td>
                       <td>{drug.drug_identification_number}</td>
                       <td>{drug.pharmaceutical_form_name}</td>
