@@ -18,16 +18,18 @@ export const POST = async (request) => {
         //     steps: z.array(z.string()),
         // }),
         description: z.string(),
-        uses: z.string(),
+        uses: z.array(z.string()),
         sideEffects: z.array(z.string()),
+        drugContraindication: z.string(),
+        allergies: z.array(z.string()),
     }),
-    system: 'You are a tool that provides descriptions, uses, and side effects of medications based on the provided data.',
+    system: 'You are a tool that provides descriptions, uses, side effects, drug contraindication, and allergies of medications based on the provided data.',
     prompt: `Medication Data:
 - DIN: ${data.din}
 - Brand Name: ${data.brandName}
 - Company: ${data.companyName}
-- Active Ingredient: ${data.activeIngredient}
 - Dosage Form: ${data.dosageForm}
+- Active Ingredient: ${data.activeIngredient}
 `,
     });
     return new Response(JSON.stringify(object))
