@@ -231,7 +231,7 @@ export default function Home() {
                     <tr 
                       key={drug.drug_identification_number} 
                       onClick={() => handleRowClick(drug.drug_identification_number)}
-                      className={styles.clickableRow} // Add this class for hover/cursor effects
+                      className={styles.clickableRow}
                     >
                       <td>{drug.brand_name}</td>
                       <td>{drug.drug_identification_number}</td>
