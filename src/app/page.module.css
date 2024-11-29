@@ -199,6 +199,15 @@ a.secondary {
   cursor: pointer;
 }
 
+.clickableRow:hover {
+  background-color: rgb(240, 240, 240);
+  cursor: pointer;
+}
+
+.clickableRow:active {
+  background-color: rgb(235, 235, 235);
+}
+
 .searchContainer {
   display: flex;
   justify-content: center;

@@ -216,7 +216,7 @@ export default function Home() {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Brand Name</th>
+                <th>Medication Name</th>
                 <th>Drug Identification Number</th>
                 <th>Dosage Form</th>
                 <th>Company Name</th>
