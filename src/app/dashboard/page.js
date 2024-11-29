@@ -18,7 +18,7 @@ export default function MedicationDetails() {
     const [description, setDescription] = useState('');
     const [uses, setUses] = useState([]);
     const [sideEffects, setSideEffects] = useState([]);
-    const [drugContraindication, setDrugContraindication] = useState('');
+    const [drugInteraction, setDrugInteraction] = useState('');
     const [allergies, setAllergies] = useState([]);
     
     const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +73,7 @@ export default function MedicationDetails() {
         setDescription(data.description);
         setSideEffects(data.sideEffects);
         setUses(data.uses);
-        setDrugContraindication(data.drugContraindication);
+        setDrugInteraction(data.drugInteraction);
         setAllergies(data.allergies);
         setIsLoading(false);
     }
@@ -125,8 +125,8 @@ export default function MedicationDetails() {
                     </section>
 
                     <section>
-                        <h3>Drug Contraindication</h3>
-                        <p>{isLoading ? "" : drugContraindication}</p>
+                        <h3>Drug Interaction</h3>
+                        <p>{isLoading ? "" : drugInteraction}</p>
                     </section>
 
                     <section>

@@ -69,7 +69,7 @@
     padding: 0 2rem;
 }
 @media (prefers-color-scheme: dark) {
-    .outerBentoContainer section {
+    .outerBentoContainer p, .outerBentoContainer li { 
         color: var(--text)!important;
     }
 }

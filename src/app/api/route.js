@@ -20,10 +20,10 @@ export const POST = async (request) => {
         description: z.string(),
         uses: z.array(z.string()),
         sideEffects: z.array(z.string()),
-        drugContraindication: z.string(),
+        drugInteraction: z.string(),
         allergies: z.array(z.string()),
     }),
-    system: 'You are a tool that provides descriptions, uses, side effects, drug contraindication, and allergies of medications based on the provided data.',
+    system: 'You are a tool that provides descriptions, uses, side effects, drug interaction, and allergies of medications based on the provided data.',
     prompt: `Medication Data:
 - DIN: ${data.din}
 - Brand Name: ${data.brandName}
