@@ -90,7 +90,7 @@ export default function MedicationDetails() {
             <main className={styles.main}>
                 {isLoading && <div className={styles.loading}><div><h3>Loading...</h3></div></div>}
                 <div className={styles.links}>
-                    <a href='/'>Search</a>
+                    <a href='/' className={styles.search}>Search</a>
                     <p>/</p>
                     <p className={styles.currentPage}>{brandName}</p>
                 </div>

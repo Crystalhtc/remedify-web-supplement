@@ -16,6 +16,7 @@
     align-items: center;
     z-index: 1000;
 }
+
 .loading div {
     width: 70%;
     max-width: 500px;
@@ -30,6 +31,7 @@
     text-align: center;
     z-index: 1001;
 }
+
 .main p, .main li {
     font-size: 12px;
 }
@@ -79,4 +81,12 @@
 }
 .overview div {
     margin: 2rem 0;
+}
+
+.search:hover {
+    color: var(--green);
+}
+
+.search:active {
+    color: var(--dark-green);
 }

@@ -52,6 +52,10 @@
     color: var(--green);
 }
 
+.navLink:active {
+    color: var(--dark-green);
+}
+
 .activeLink {
     color: var(--green);
     font-weight: bold;
