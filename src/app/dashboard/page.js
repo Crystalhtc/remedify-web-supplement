@@ -14,12 +14,14 @@ export default function MedicationDetails() {
     const [dosageForm, setDosageForm] = useState('');
     const [activeIngredient, setActiveIngredient] = useState('');
 
-    const [isLoading, setIsLoading] = useState(false);
+    // set prompts for open ai
     const [description, setDescription] = useState('');
     const [uses, setUses] = useState([]);
     const [sideEffects, setSideEffects] = useState([]);
     const [drugContraindication, setDrugContraindication] = useState('');
     const [allergies, setAllergies] = useState([]);
+    
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async() => {
         setIsLoading(true);
